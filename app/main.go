@@ -12,7 +12,6 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/google/uuid"
-	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
 
@@ -63,7 +62,6 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
