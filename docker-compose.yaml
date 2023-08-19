@@ -1,11 +1,11 @@
 version: '3'
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:alpine
     environment:
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: dbname
+      POSTGRES_USER: myusername
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydbname
     ports:
       - "5432:5432"
     volumes:
