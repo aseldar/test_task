@@ -1,17 +1,27 @@
 name: CI
 
-on: 
+on:
   push:
-    branches:
+    branches: 
       - master
-      
+
 jobs:
 
-  test:
+  build:
+
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Build and test
-      run: make github
+    
+    - name: Build images
+      run: make build
+
+    - name: Run containers
+      run: make up
+
+    - name: Test
+      run: make test
+
+    - name: Push images
+      run: make push
