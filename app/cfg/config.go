@@ -1,6 +1,8 @@
 package cfg
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type DBConfig struct {
 	Host     string
@@ -10,9 +12,13 @@ type DBConfig struct {
 	DBName   string
 }
 
+// var POSTGRES_USER string = os.Getenv("POSTGRES_USER")
+// var POSTGRES_PASSWORD string = os.Getenv("POSTGRES_PASSWORD")
+// var POSTGRES_DB string = os.Getenv("POSTGRES_DB")
+
 func GetDBConfig() DBConfig {
 	return DBConfig{
-		Host:     "localhost",
+		Host:     "postgres",
 		Port:     5432,
 		User:     "PG_USER",
 		Password: "PG_PASS",
@@ -25,11 +31,3 @@ func (c *DBConfig) GetConnectionString() string {
 		"password=%s dbname=%s sslmode=disable",
 		c.Host, c.Port, c.User, c.Password, c.DBName)
 }
-
-//   const (
-// 	host     = "localhost"
-// 	port     = 5432
-// 	user     = "PG_USER"
-// 	password = "PG_PASS"
-// 	dbname   = "PG_DATABASE"
-// )

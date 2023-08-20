@@ -1,4 +1,4 @@
-module test_task
+module github.com/aseldar/test_task
 
 go 1.20
 

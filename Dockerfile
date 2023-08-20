@@ -1,18 +1,25 @@
-FROM golang:latest
+FROM golang:1.20-alpine as builder
 
-WORKDIR /app
+COPY go.mod go.sum /go/src/github.com/aseldar/test_task/
+WORKDIR /go/src/github.com/aseldar/test_task/
+RUN go mod download
+COPY . /go/src/github.com/aseldar/test_task/
 
-RUN go mod init app
+# Копируем файл миграции на этапе сборки
+COPY /app/db/migration /go/src/github.com/aseldar/test_task/app/db/migration  
 
-# RUN go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o build/test_task ./app/main.go
 
-COPY migrate.sh /app/migrate.sh
-RUN chmod +x /app/migrate.sh
+# Create a minimal production image
+FROM alpine:latest
 
-COPY . .
+COPY --from=builder /go/src/github.com/aseldar/test_task/app/db/migration /app/db/migration
 
-RUN go build -o main ./app
+COPY --from=builder /go/src/github.com/aseldar/test_task/build/test_task  /usr/bin/test_task
 
+ENV HTTP_ADDR=:8080
 
-CMD ["/app/migrate.sh", "./main"]
+EXPOSE 8080
+
+# Run the binary when the container starts
+ENTRYPOINT ["/usr/bin/test_task"]

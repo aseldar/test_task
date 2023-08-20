@@ -3,9 +3,9 @@ services:
   postgres:
     image: postgres:alpine
     environment:
-      POSTGRES_USER: myusername
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydbname
+      POSTGRES_USER: PG_USER
+      POSTGRES_PASSWORD: PG_PASS
+      POSTGRES_DB: PG_DATABASE
     ports:
       - "5432:5432"
     volumes:
@@ -19,6 +19,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    environment:
+      POSTGRES_HOST: postgres 
+      POSTGRES_USER: PG_USER
+      POSTGRES_PASSWORD: PG_PASS
+      POSTGRES_DATABASE: PG_DATABASE
     depends_on:
       - postgres
     networks:
