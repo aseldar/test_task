@@ -1,11 +1,13 @@
-build:
-	docker-compose build
+.PHONY: dc run test lint
 
-up:
-	docker-compose up -d
+dc:
+	docker-compose up  --remove-orphans --build
+
+run:
+	go build -o app test_task/app/main.go && HTTP_ADDR=:8080 ./app
 
 test:
-	docker-compose exec api go test -v ./...
+	go test -race ./...
 
-push:
-	docker-compose push
+lint:
+	golangci-lint run
