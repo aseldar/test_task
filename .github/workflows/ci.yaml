@@ -3,7 +3,7 @@ run-name: ${{ github.aseldar }} is learning GitHub Actions
 on: [push]
 jobs:
   check-bats-version:
-    runs-on: ubuntu-latest
+    runs-on: alpine
     steps:
       - uses: actions/checkout@v3
       - run: docker-compose up  --remove-orphans --build
