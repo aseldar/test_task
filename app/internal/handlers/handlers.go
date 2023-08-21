@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/aseldar/test_task/app/db"
@@ -36,6 +37,27 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("Error decoding JSON: %v", err)
 		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		return
+	}
+
+	// Input validation
+	if user.Firstname == "" || strings.ContainsAny(user.Firstname, "0123456789") {
+		http.Error(w, "Invalid firstname", http.StatusBadRequest)
+		return
+	}
+
+	if user.Lastname == "" || strings.ContainsAny(user.Lastname, "0123456789") {
+		http.Error(w, "Invalid lastname", http.StatusBadRequest)
+		return
+	}
+
+	if user.Email == "" || !strings.Contains(user.Email, "@") {
+		http.Error(w, "Invalid email", http.StatusBadRequest)
+		return
+	}
+
+	if user.Age > 120 {
+		http.Error(w, "Invalid age", http.StatusBadRequest)
 		return
 	}
 
